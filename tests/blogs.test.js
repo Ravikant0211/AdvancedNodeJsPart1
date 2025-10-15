@@ -42,7 +42,7 @@ describe('When logged in', async () => {
             const title = await page.getContentsOf('.card-title');
             const content = await page.getContentsOf('p');
 
-            expect(title).toEqual('My Title');
+            expect(title).toEqual('My Title'); 
             expect(content).toEqual('My Content');
         })
     })
@@ -59,5 +59,17 @@ describe('When logged in', async () => {
             expect(titleError).toEqual('You must provide a value');
             expect(contentError).toEqual('You must provide a value');
         })
+    })
+})
+
+describe('When user is not logged in', async () => {
+    test('User cannot create blog posts', async () => {
+        const result = await page.post('/api/blogs', { title: 'T', content: 'C' });
+        expect(result).toEqual({ error: 'You must log in!' });
+    })
+
+    test('User cannot get a list of blog posts', async () => {
+        const result = await page.get('/api/blogs');
+        expect(result).toEqual({ error: 'You must log in!' });
     })
 })
